@@ -83,7 +83,11 @@ function removeInvalidKeys(obj: Record<string, any>) {
   return copyObj;
 }
 
+window.stringSizeCount = 0;
+window.uncachedStringSizeCount = 0;
 export const getStringSize = (text: string | number, style: CSSProperties = {}): Size => {
+  window.stringSizeCount++;
+  console.log('getStringSize', text);
   if (text === undefined || text === null || Global.isSsr) {
     return { width: 0, height: 0 };
   }
@@ -96,6 +100,7 @@ export const getStringSize = (text: string | number, style: CSSProperties = {}):
   }
 
   try {
+    window.uncachedStringSizeCount++;
     let measurementSpan = document.getElementById(MEASUREMENT_SPAN_ID);
     if (!measurementSpan) {
       measurementSpan = document.createElement('span');
